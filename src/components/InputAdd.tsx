@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Flex, Input } from 'antd';
+import { Button, Flex, Input, Modal } from 'antd';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTask } from '../store/taskSlice';
@@ -20,7 +20,24 @@ export const InputAdd = () => {
   }, []);
 
   const onSetTask = useCallback(async () => {
-    dispatch(addTask(caption));
+    const keyCopy = listTask.filter((task) => task.caption === caption)?.[0];
+    if (keyCopy) {
+      Modal.confirm({
+        title: 'Confirm',
+        content: `Your list task include "${caption}". Would you like add as copy?`,
+        onOk: () => {
+          dispatch(addTask(caption));
+        },
+        footer: (_, { OkBtn, CancelBtn }) => (
+            <>
+              <CancelBtn />
+              <OkBtn />
+            </>
+        ),
+      });
+    } else {
+      dispatch(addTask(caption));
+    }
   }, [caption, dispatch]);
 
   return (
@@ -31,7 +48,7 @@ export const InputAdd = () => {
                 value={caption}
                 onChange={onChangeCaption}
                 placeholder={'caption'} />
-            <Button onClick={onSetTask}
+            <Button onClick={onSetTask} disabled={!caption}
                 size={'large'} type={'primary'}>Add</Button>
         </Flex>
   );
