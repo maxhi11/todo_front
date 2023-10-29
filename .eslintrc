@@ -19,7 +19,8 @@
     "max-len": 0,
     "no-console": "off",
     "no-param-reassign": 0,
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+    "import/no-named-as-default": "off"
   },
   "globals": {
     "document": "readonly",

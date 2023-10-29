@@ -46,13 +46,14 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/jest": "^27.0.1",
     "@types/luxon": "^3.3.3",
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "@types/uuid": "^9.0.6",
     "@types/styled-components": "^5.1.29",
+    "@types/uuid": "^9.0.6",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
     "dotenv-picker": "^1.0.13",
