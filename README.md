@@ -12,13 +12,19 @@ Marvelous 2v is a project developed using React and TypeScript. This application
 
 To install the project's dependencies, follow these steps:
 
-1. Run the command `yarn install`.
+1. Run the command 
+```bash
+yarn install
+```
 
 ## Running the Application
 
 To start the application, follow these steps:
 
 1. Run the command `yarn start`.
+```bash
+yarn start
+```
 
 ## Backend Configuration
 
@@ -40,7 +46,10 @@ Make sure to specify the correct address and port if it's different from the def
 
 3. To launch the application with the new backend configuration, use the following command:
 
-- Run `yarn start:dotenv`.
+- Run.
+```bash
+yarn start:dotenv
+```
 - When prompted, select the `.env` file and continue by pressing the Enter key.
 
 Your Marvelous 2v application is now ready to use with the configured backend server.
