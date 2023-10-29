@@ -24,7 +24,7 @@ export const InputAdd = () => {
     if (keyCopy) {
       Modal.confirm({
         title: 'Confirm',
-        content: `Your list task include "${caption}". Would you like add as copy?`,
+        content: `Your task list includes "${caption}". Would you like add it as a copy?`,
         onOk: () => {
           dispatch(addTask(caption));
         },

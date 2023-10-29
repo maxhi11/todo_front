@@ -53,8 +53,20 @@ export const Controller: React.FC<IController> = () => {
       await wrapperFunction(async () => {
         const queryParams = `search_text=${searchText}`;
         const listTask = (await axios.get<TaskType[]>(`${URL_API_TASKS}?${queryParams}`)).data;
+
         if (Array.isArray(listTask)) {
           dispatch(loadListTask(listTask));
+          if (searchText && !listTask.length) {
+            modal.warning({
+              title: 'Searching message ...',
+              content: (
+                  <>
+                    <p>Sorry, but we can't find any task for your request "{searchText}"</p>
+                    <p>Please change search text, and maybe be next request will be successful :)</p>
+                  </>
+              ),
+            });
+          }
           //messageApi.success('Data loaded successfully!');
         }
       });
@@ -112,7 +124,7 @@ export const Controller: React.FC<IController> = () => {
   return (
       <>
         {contextMessageHolder}
-          {contextHolder}
+        {contextHolder}
       </>
   );
 };
