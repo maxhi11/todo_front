@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { Button, Checkbox, Modal } from 'antd';
 import styled from 'styled-components';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { changeStatusTask, deleteTask } from '../store/taskSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { InputAdd } from './InputAdd';
+import { selectChangedTask } from '../store';
 
 interface ITask {
   check?: boolean;
@@ -12,7 +14,8 @@ interface ITask {
 }
 
 const CheckBoxStyle = styled(Checkbox)`
-  padding: 8px;
+  padding: 1px 3px;
+  margin-right: 5px;
   transform: scale(1.3);
 `;
 
@@ -28,9 +31,10 @@ const BoxCheckLabelStyle = styled.div`
   cursor: pointer;
   display: inline-block;
   width: calc(100% - 70px);
+  padding: 7px 5px;
 `;
 
-const ButtonDeleteStyle = styled(Button)`
+const ButtonGroupStyle = styled.div`
   display: none;
   position: absolute;
   right: 4px;
@@ -42,10 +46,24 @@ const ButtonDeleteStyle = styled(Button)`
 
 export const Task: React.FC<ITask> = ({ check, title, id }) => {
   const dispatch = useDispatch();
+  const [statusEdit, setStatusEdit] = useState(false);
+  const changedTask = useSelector(selectChangedTask);
+
+  useEffect(() => {
+    if (changedTask && changedTask.id === id) {
+      setStatusEdit(false);
+    }
+  }, [changedTask]);
 
   const onClickChecked = useCallback(() => {
-    dispatch(changeStatusTask(id));
-  }, [id, dispatch]);
+    if (!statusEdit) {
+      dispatch(changeStatusTask(id));
+    }
+  }, [id, dispatch, statusEdit]);
+
+  const onClickEdit = useCallback(() => {
+    setStatusEdit(true);
+  }, []);
 
   const onClickDelete = useCallback(() => {
     Modal.confirm({
@@ -67,13 +85,27 @@ export const Task: React.FC<ITask> = ({ check, title, id }) => {
   return (
         <BoxTaskStyle>
             <BoxCheckLabelStyle onClick={onClickChecked}>
-                <CheckBoxStyle  checked={!!check} />{title}
+                {
+                    !statusEdit
+                      ? <><CheckBoxStyle  checked={!!check} />{title}</>
+                      : <InputAdd mode={'edit'} size={'small'} defaultText={title} id={id} />
+                }
             </BoxCheckLabelStyle>
-            <ButtonDeleteStyle
-                disabled={!!check}
-                onClick={onClickDelete}
-                type={'default'} danger
-                size={'small'}>Delete</ButtonDeleteStyle>
+            <ButtonGroupStyle>
+                {
+                    !statusEdit &&
+                  <Button style={{ marginRight: 5 }}
+                          disabled={!!check}
+                          onClick={onClickEdit}
+                          type={'default'}
+                          size={'small'}>Edit</Button>
+                }
+                <Button
+                    disabled={!!check}
+                    onClick={onClickDelete}
+                    type={'default'} danger
+                    size={'small'}>Delete</Button>
+            </ButtonGroupStyle>
         </BoxTaskStyle>
   );
 };

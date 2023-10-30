@@ -116,6 +116,7 @@ export const {
   deleteTask,
   deleteTaskFromList,
   changeStatusTask,
+  changeCaptionTask,
   updateListTask,
 } = taskSlice.actions;
 

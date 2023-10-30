@@ -21,7 +21,7 @@ function App() {
       <BoxStyle>
           <Header />
           <Flex justify={'space-between'} align={'center'} style={{ padding: '20px 0' }}>
-              <InputAdd />
+              <InputAdd mode={'add'} size={'large'} defaultText={''} />
               <InputSearch />
           </Flex>
           <Flex justify={'space-between'} align={'flex-start'}>
