@@ -19,6 +19,7 @@ export const InputSearch = () => {
           <Input style={{ width: '50%' }}
                  onChange={onChangeCaption}
                  disabled={!searchText && !listTask.length}
+                 value={searchText}
                  size={'large'} allowClear placeholder={'search'}  />
       </Flex>
   );

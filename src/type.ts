@@ -6,3 +6,4 @@ export type TaskType = {
   timeFinish?: number
 };
 
+export type RequestType = 'search' | 'clear' | 'add' | 'tasks' | 'delete' | 'edit' | 'none';

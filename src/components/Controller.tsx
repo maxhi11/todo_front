@@ -4,9 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectChangedTask, selectDeletedTask, selectFlagClear, selectSearchText } from '../store';
 import axios from 'axios';
 import { URL_API_DELETE, URL_API_SAVE, URL_API_TASKS } from '../const';
-import { deleteTaskFromList, loadListTask, reset, setFlagClear, setPreloader, updateListTask } from '../store/taskSlice';
+import {
+  changeStatusTask,
+  deleteTaskFromList,
+  loadListTask,
+  reset,
+  setFlagClear, setPendingRequest,
+  setPreloader,
+  updateListTask,
+} from '../store/taskSlice';
 import { message, Modal } from 'antd';
-import { TaskType } from '../type';
+import { RequestType, TaskType } from '../type';
 
 interface IController {
   type?: number;
@@ -33,9 +41,11 @@ export const Controller: React.FC<IController> = () => {
   const flagClear = useSelector(selectFlagClear);
   const searchText = useSelector(selectSearchText);
 
-  const wrapperFunction = useCallback(async (func: () => Promise<void>) => {
+  const wrapperFunction = useCallback(async (type: RequestType, func: () => Promise<void>) => {
     try {
       dispatch(setPreloader(true));
+      dispatch(setPendingRequest('none'));
+
       await func();
     } catch (e) {
       console.log(e);
@@ -45,12 +55,13 @@ export const Controller: React.FC<IController> = () => {
       modal.error(config);
     } finally {
       dispatch(setPreloader(false));
+      dispatch(setPendingRequest(type));
     }
   }, [flagClear]);
 
   useEffect(() => {
     (async () => {
-      await wrapperFunction(async () => {
+      await wrapperFunction('search', async () => {
         const queryParams = `search_text=${searchText}`;
         const listTask = (await axios.get<TaskType[]>(`${URL_API_TASKS}?${queryParams}`)).data;
 
@@ -76,7 +87,7 @@ export const Controller: React.FC<IController> = () => {
   useEffect(() => {
     (async () => {
       if (flagClear) {
-        await wrapperFunction(async () => {
+        await wrapperFunction('clear', async () => {
           const apiResult = await axios.post<boolean>(`${URL_API_DELETE}/clearAll`);
           if (apiResult) {
             dispatch(reset());
@@ -93,11 +104,12 @@ export const Controller: React.FC<IController> = () => {
     }
 
     (async () => {
-      await wrapperFunction(async () => {
+      await wrapperFunction('add', async () => {
         const apiResult = await axios.post<boolean>(`${URL_API_SAVE}`, changedTask);
 
         if (apiResult) {
           dispatch(updateListTask());
+          dispatch(changeStatusTask(''));
           messageApi.success('Changes saved successfully!');
         }
       });
@@ -110,7 +122,7 @@ export const Controller: React.FC<IController> = () => {
     }
 
     (async () => {
-      await wrapperFunction(async () => {
+      await wrapperFunction('delete', async () => {
         const apiResult = await axios.post<boolean>(`${URL_API_DELETE}/${deletedTask.id}`);
 
         if (apiResult) {

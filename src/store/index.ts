@@ -15,4 +15,5 @@ export const selectPreloader = (state:RootState) => state.task.preloader;
 export const selectFlagClear = (state:RootState) => state.task.flagClear;
 export const selectSearchText = (state:RootState) => state.task.searchText;
 export const selectChangedTask = (state:RootState) => state.task.changedTask;
+export const selectPendingRequest = (state:RootState) => state.task.pendingRequest;
 export const selectDeletedTask = (state:RootState) => state.task.deletedTask;

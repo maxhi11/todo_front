@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Button, Flex, Input, Modal } from 'antd';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addTask, changeCaptionTask } from '../store/taskSlice';
-import { selectTasks } from '../store';
+import { addTask, changeCaptionTask, setSearchText } from '../store/taskSlice';
+import { selectPendingRequest, selectTasks } from '../store';
 // eslint-disable-next-line import/named
 import { SizeType } from 'antd/es/config-provider/SizeContext';
 
@@ -19,16 +19,21 @@ export const InputAdd: React.FC<IInputAdd> = ({ size, defaultText, mode, id }) =
 
   const [caption, setCaption] = useState(defaultText);
   const listTask = useSelector(selectTasks);
+  const pendingRequest = useSelector(selectPendingRequest);
 
   useEffect(() => {
-    if (mode === 'add') {
+    if (mode === 'add' && pendingRequest === 'add') {
       setCaption('');
     }
-  }, [listTask]);
+  }, [pendingRequest, mode]);
 
   const onChangeCaption = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    console.log('mode', mode);
+    if (mode === 'add') {
+      dispatch(setSearchText(''));
+    }
     setCaption(event.target.value);
-  }, []);
+  }, [mode]);
 
   const onSetTask = useCallback(async () => {
     const keyCopy = listTask.filter((task) => task.caption === caption && (!id || task.id !== id))?.[0];

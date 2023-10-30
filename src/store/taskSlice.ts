@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { TaskType } from '../type';
+import { RequestType, TaskType } from '../type';
 import { v4 as uuidv4 } from 'uuid';
 import { DateTime } from 'luxon';
 
@@ -11,6 +11,7 @@ interface ITaskState {
   flagClear?: boolean;
   searchText?: string;
   preloader: boolean;
+  pendingRequest: RequestType;
 }
 
 const initialState: ITaskState = {
@@ -20,6 +21,7 @@ const initialState: ITaskState = {
   flagClear: false,
   searchText: '',
   preloader: false,
+  pendingRequest: 'none',
 };
 
 export const taskSlice = createSlice({
@@ -32,6 +34,9 @@ export const taskSlice = createSlice({
     },
     setPreloader: (state: ITaskState, action: PayloadAction<boolean>) => {
       state.preloader = action.payload;
+    },
+    setPendingRequest: (state: ITaskState, action: PayloadAction<RequestType>) => {
+      state.pendingRequest = action.payload;
     },
     setSearchText: (state: ITaskState, action: PayloadAction<string>) => {
       state.searchText = action.payload;
@@ -109,6 +114,7 @@ export const taskSlice = createSlice({
 export const {
   reset,
   setPreloader,
+  setPendingRequest,
   setSearchText,
   loadListTask,
   setFlagClear,
