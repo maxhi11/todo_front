@@ -62,7 +62,7 @@ export const Controller: React.FC<IController> = () => {
               content: (
                   <>
                     <p>Sorry, but we can't find any task for your request "{searchText}"</p>
-                    <p>Please change search text, and maybe be next request will be successful :)</p>
+                    <p>Please change search text, and maybe next request will be successful :)</p>
                   </>
               ),
             });
